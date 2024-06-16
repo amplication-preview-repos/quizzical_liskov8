@@ -1,0 +1,31 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Asset {
+  createdAt    DateTime            @default(now())
+  id           String              @id @default(cuid())
+  measurements Measurement[]
+  name         String?
+  typeField    EnumAssetTypeField?
+  updatedAt    DateTime            @updatedAt
+}
+
+model Measurement {
+  asset         Asset?    @relation(fields: [assetId], references: [id])
+  assetId       String?
+  createdAt     DateTime  @default(now())
+  date          DateTime?
+  id            String    @id @default(cuid())
+  percentChange Float?
+  updatedAt     DateTime  @updatedAt
+}
+
+enum EnumAssetTypeField {
+  Option1
+}
